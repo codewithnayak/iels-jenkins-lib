@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iels-station-manager
+spec:
+  selector:
+    matchLabels:
+      app: iels-station-manager
+  template:
+    metadata:
+      labels:
+        app: iels-station-manager
+    spec:
+      containers:
+        - name: iels-station-manager
+          image: hello-world
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 80
