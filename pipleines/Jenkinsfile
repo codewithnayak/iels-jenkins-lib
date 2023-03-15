@@ -13,7 +13,7 @@ pipeline{
             steps{
                  echo "${params.PERSON}"
                  sh(script: 'ls -l')
-                 sh(script: "./resources/build.sh")
+                 sh(script: "./build.sh")
             }
         }
     }   
