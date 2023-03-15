@@ -3,12 +3,8 @@ pipeline{
     stages{
         stage('build'){
             steps{
-                checkout scmGit(branches: 
-                [[name: 'main']],
-                 extensions: [], 
-                 userRemoteConfigs: [[url: 'https://github.com/codewithnayak/els-station-manager.git']])
-
-                 sh '../resources/build.sh'
+                
+                 sh './resources/build.sh'
             }
         }
     }
