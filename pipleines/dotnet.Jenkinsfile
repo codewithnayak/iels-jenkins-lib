@@ -10,16 +10,31 @@ pipeline {
         spec:
           containers:
           - name: dotnetcore
-            image: mcr.microsoft.com/dotnet/sdk:6.0-alpine
+            image: mcr.microsoft.com/dotnet/sdk:6.0
+            command:
+            - cat
+            tty: true
         '''
       retries 2
     }
   }
   stages {
-    stage('Run dotnet') {
+    stage('Checkout') {
       steps {
         container('dotnetcore') {
-          sh 'dotnet -version'
+            echo '**** code checkout *****'
+            checkout scmGit(branches: [[name: 'main']],
+            extensions: [], 
+            userRemoteConfigs: [[url: 'https://github.com/codewithnayak/els-station-manager.git']])
+            echo '**** code checkout successful ****'
+
+            sh(script: 'ls -l')
+            //build dotnet project 
+            sh(script: """
+            dotnet restore 
+            dotnet build -c Release 
+            """)
+
         }
       }
     }
