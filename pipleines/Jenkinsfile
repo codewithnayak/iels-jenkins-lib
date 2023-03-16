@@ -12,11 +12,20 @@ pipeline{
         stage('build'){
             steps{
                  echo "${params.PERSON}"
+                 println 'path'
+                 sh('pwd')
                  sh(script: 'ls -l')
                  dir('resources'){
+                    println 'path'
+                    sh('pwd')
                     sh(script: 'ls -l ')
-                    sh(script: 'build.sh')
+                    sh(script: './build.sh')
                  }
+                 println 'path'
+                 sh('pwd')
+
+
+
             }
         }
     }   
