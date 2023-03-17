@@ -6,22 +6,27 @@ pipeline {
       retries 2
     }
   }
+
+  parameters{
+      string(name:'BRANCH_NAME', defaultValue: 'main' , description: 'he branch to be built')
+  }
+  
+
   stages {
     stage('Checkout') {
       steps {
+        git url: 'https://github.com/codewithnayak/els-station-manager.git' , branch: '${BRANCH_NAME}'
+      }
+    }
+
+
+    stage('Build') {
+      steps {
         container('dotnetcore') {
-            welcomeJob('main')
-            checkout scmGit(branches: [[name: 'main']],
-            extensions: [], 
-            userRemoteConfigs: [[url: 'https://github.com/codewithnayak/els-station-manager.git']])
-            echo '**** code checkout successful ****'
-
-            sh(script: 'ls -l')
-            //build dotnet project 
-            sh(script: """
-            dotnet restore
-            """)
-
+            sh '''
+             dotnet restore
+             dotnet build -c Release
+            '''
         }
       }
     }
