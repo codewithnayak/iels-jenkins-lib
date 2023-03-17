@@ -23,7 +23,7 @@ pipeline {
     stage('Checkout') {
       steps {
         container('dotnetcore') {
-            printBranch 'main'
+            welcomeJob 'main'
             checkout scmGit(branches: [[name: 'main']],
             extensions: [], 
             userRemoteConfigs: [[url: 'https://github.com/codewithnayak/els-station-manager.git']])
