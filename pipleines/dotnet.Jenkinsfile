@@ -1,4 +1,4 @@
-@library('first-small-lib') _
+@Library('first-small-lib') _
 pipeline {
   agent {
     kubernetes {
