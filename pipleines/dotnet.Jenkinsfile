@@ -1,3 +1,4 @@
+@library('first-small-lib') _
 pipeline {
   agent {
     kubernetes {
@@ -22,7 +23,7 @@ pipeline {
     stage('Checkout') {
       steps {
         container('dotnetcore') {
-            echo '**** code checkout *****'
+            call('main')
             checkout scmGit(branches: [[name: 'main']],
             extensions: [], 
             userRemoteConfigs: [[url: 'https://github.com/codewithnayak/els-station-manager.git']])
@@ -31,8 +32,7 @@ pipeline {
             sh(script: 'ls -l')
             //build dotnet project 
             sh(script: """
-            dotnet restore 
-            dotnet build -c Release 
+            dotnet restore
             """)
 
         }
