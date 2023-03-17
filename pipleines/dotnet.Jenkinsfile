@@ -2,20 +2,7 @@
 pipeline {
   agent {
     kubernetes {
-      yaml '''
-        apiVersion: v1
-        kind: Pod
-        metadata:
-          labels:
-            some-label: dotnet-label-value
-        spec:
-          containers:
-          - name: dotnetcore
-            image: mcr.microsoft.com/dotnet/sdk:6.0
-            command:
-            - cat
-            tty: true
-        '''
+      yaml dotnetBuildPod()
       retries 2
     }
   }
@@ -23,7 +10,7 @@ pipeline {
     stage('Checkout') {
       steps {
         container('dotnetcore') {
-            welcomeJob 'main'
+            welcomeJob('main')
             checkout scmGit(branches: [[name: 'main']],
             extensions: [], 
             userRemoteConfigs: [[url: 'https://github.com/codewithnayak/els-station-manager.git']])
