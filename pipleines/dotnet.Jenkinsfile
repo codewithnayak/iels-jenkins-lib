@@ -1,4 +1,5 @@
 @Library('first-small-lib') _
+def imgVersion = ''
 pipeline {
   agent {
     kubernetes {
@@ -46,7 +47,7 @@ pipeline {
     stage('Build And Push Image'){
       steps{
           container('kaniko'){
-            def imgVersion = getBuildNumber(params.IMG_VERSION)
+            imgVersion = getBuildNumber(params.IMG_VERSION)
             echo imgVersion
             sh '''
             /kaniko/executor --context . --destination sekharinweb/ielsmanager:${imgVersion}
