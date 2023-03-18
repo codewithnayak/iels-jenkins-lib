@@ -9,6 +9,8 @@ pipeline {
 
   parameters{
       string(name:'BRANCH_NAME', defaultValue: 'main' , description: 'he branch to be built')
+      string(name:'SERVICE_NAME',defaultValue:'',description: 'The service to be built.')
+      string(name:'IMG_VERSION', defaultValue:'', descriptin: 'The image version , if not provided it will be the build number')
   }
   
 
@@ -44,11 +46,20 @@ pipeline {
     stage('Build And Push Image'){
       steps{
           container('kaniko'){
+            def imgVersion = getBuildNumber(params.IMG_VERSION)
+            echo imgVersion
             sh '''
-            /kaniko/executor --context `docker` --destination bibinwilson/hello-kaniko:1.0
+            /kaniko/executor --context . --destination sekharinweb/ielsmanager:${imgVersion}
             '''
           }
       }
     }
   }
+}
+
+def getBuildNumber(imageVersion){
+  if(imageVersion == ''){
+    return env.BUILD_NUMBER
+  }
+  return imageVersion
 }
