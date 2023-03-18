@@ -2,7 +2,7 @@
 pipeline {
   agent {
     kubernetes {
-      yaml dotnetBuildPod()
+      yaml dotnetKanikoPod()
       retries 2
     }
   }
@@ -28,6 +28,26 @@ pipeline {
              dotnet build -c Release
             '''
         }
+      }
+    }
+
+    stage('Test'){
+      steps{
+        container('dotnetcore'){
+          sh '''
+             dotnet test
+            '''
+        }
+      }
+    }
+
+    stage('Build And Push Image'){
+      steps{
+          container('kaniko'){
+            sh '''
+            /kaniko/executor --context `docker` --destination bibinwilson/hello-kaniko:1.0
+            '''
+          }
       }
     }
   }
