@@ -55,9 +55,8 @@ pipeline {
     stage('Build And Push Image'){
       steps{
           container('kaniko'){
-            output = getBuildNumber(params.IMG_VERSION)
             sh '''
-            /kaniko/executor --context . --destination sekharinweb/ielsmanager:${output}
+            /kaniko/executor --context . --destination sekharinweb/ielsmanager:${getBuildNumber(params.IMG_VERSION)}
             '''
           }
       }
