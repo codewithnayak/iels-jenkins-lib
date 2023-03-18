@@ -56,7 +56,7 @@ pipeline {
       steps{
           container('kaniko'){
             sh '''
-            /kaniko/executor --context . --destination sekharinweb/ielsmanager:${getBuildNumber(params.IMG_VERSION)}
+            /kaniko/executor --context . --destination sekharinweb/ielsmanager:latest
             '''
           }
       }
