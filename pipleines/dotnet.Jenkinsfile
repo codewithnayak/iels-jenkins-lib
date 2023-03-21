@@ -1,13 +1,5 @@
 @Library('first-small-lib') _
 
-def getBuildNumber(imageVersion){
-  if(imageVersion == ''){
-    return env.BUILD_NUMBER
-  }
-  return imageVersion
-}
-
-
 pipeline {
   agent {
     kubernetes {
@@ -19,14 +11,15 @@ pipeline {
   parameters{
       string(name:'BRANCH_NAME', defaultValue: 'main' , description: 'he branch to be built')
       string(name:'SERVICE_NAME',defaultValue:'',description: 'The service to be built.')
-      string(name:'IMG_VERSION', defaultValue:'', description: 'The image version , if not provided it will be the build number')
+      string(name:'IMG_VERSION', defaultValue:'', description: 'The image version , if not provided it will be the build number.')
+      string(name:'IMG_NAME',defaultValue:'service',description:'Give the desired image name here.')
   }
   
 
   stages {
     stage('Checkout') {
       steps {
-        git url: 'https://github.com/codewithnayak/els-station-manager.git' , branch: '${BRANCH_NAME}'
+        git url: 'https://github.com/codewithnayak/${SERVICE_NAME}.git' , branch: '${BRANCH_NAME}'
       }
     }
 
@@ -56,7 +49,23 @@ pipeline {
       steps{
           container('kaniko'){
             sh '''
-            /kaniko/executor --context . --destination sekharinweb/ielsmanager:latest
+            /kaniko/executor --context . --destination sekharinweb/${IMG_NAME}:1.0.0
+            '''
+          }
+      }
+    }
+
+    stage('Package'){
+      agent{
+          kubernetes{
+            yaml helmPod()
+            retries 2
+          }
+      }
+      steps{
+          container('helm'){
+            sh '''
+            helm template manifest/
             '''
           }
       }
