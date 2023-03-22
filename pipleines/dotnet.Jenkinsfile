@@ -12,7 +12,7 @@ pipeline {
       string(name:'BRANCH_NAME', defaultValue: 'main' , description: 'he branch to be built')
       string(name:'SERVICE_NAME',defaultValue:'',description: 'The service to be built.')
       string(name:'IMG_VERSION', defaultValue:'', description: 'The image version , if not provided it will be the build number.')
-      string(name:'IMG_NAME',defaultValue:'service',description:'Give the desired image name here.')
+      string(name:'IMG_NAME',defaultValue:'dotnettestapi',description:'Give the desired image name here.')
   }
   
 
@@ -49,7 +49,7 @@ pipeline {
       steps{
           container('kaniko'){
             sh '''
-            /kaniko/executor --context . --destination sekharinweb/${IMG_NAME}:1.0.0
+            /kaniko/executor --context . --destination sekharinweb/${IMG_NAME}:1.${BUILD_NUMBER}.0
             '''
           }
       }
@@ -65,7 +65,7 @@ pipeline {
       steps{
           container('helm'){
             sh '''
-            helm template manifest/
+            helm create ./manifest
             '''
           }
       }

@@ -1,0 +1,84 @@
+#
+# Persistent volume , persistent volume claim and storage classes
+# explained with mongo db as an example .
+# Here cloud provider is Google Cloud .
+#
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongodb-data
+spec:
+  capacity:
+    storage: 10Gi
+  volumeMode: Filesystem ## Default Mode
+  accessModes:
+    - ReadWriteOnce ##Mounted for Read and write by single client (** Client -> Worker Node not pods)
+    - ReadOnlyMany ## Mounted for read only by multiple clients
+  persistentVolumeReclaimPolicy: Retain #(Delete and Recycle ) - GCP does not support Recycle.
+  gcePersistentDisk: #Google cloud specific , AWS and Azure also present
+    pdName: mongodb
+    fsType: ext4
+# Persistent volumes are not not bound to any namespace.
+# They are cluster level resources
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb-pvc
+  namespace: default #
+  labels:
+    app: mongodb-pvc
+spec:
+  storageClassName: slow-block # dynamic provisioning of volumes then it will look for a storage class object
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+# This will automatically be bound if the above pv is avilable and storageclassname is not mentioned.
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "mongodb"
+  namespace: default
+  labels:
+    app: "mongodb"
+spec:
+  containers:
+    - name: mongodb
+      image: "mongo:latest"
+      resources:
+        limits:
+          cpu: 200m
+          memory: 500Mi
+        requests:
+          cpu: 100m
+          memory: 200Mi
+      ports:
+        - containerPort: 27017
+          name: tcp
+      volumeMounts:
+        - name: mongodb-data
+          mountPath: /db/data
+  volumes:
+    - name: mongodb-data
+      persistentVolumeClaim:
+        claimName: mongodb-pvc # The above PVC
+  restartPolicy: Always
+
+---
+#Storage class is also cluster level resource
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: slow-block
+provisioner: kubernetes.io/gce-pd # Specific to Google Cloud
+parameters:
+  type: pd-standard
+  fstype: ext4
+  replication-type: none
+
+---
+
