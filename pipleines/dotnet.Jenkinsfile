@@ -24,8 +24,8 @@ pipeline {
     }
 
 
-    stage('Build') { ./kkk/
-      steps {lkj  
+    stage('Build') {
+      steps {  
         container('dotnetcore') {
             sh '''
              dotnet restore
