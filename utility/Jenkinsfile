@@ -1,0 +1,20 @@
+pipeline{
+    agent{
+        kubernetes{
+            yaml kanikoPod()
+            retries 2
+        }
+    }
+
+    stages{
+        stage('Build And Push Image'){
+        steps{
+            container('kaniko'){
+                sh '''
+                /kaniko/executor --context . --destination sekharinweb/utility:latest
+                '''
+            }
+          }
+        }
+    }
+}
