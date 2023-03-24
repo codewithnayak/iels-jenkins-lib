@@ -51,6 +51,7 @@ pipeline {
             sh '''
             /kaniko/executor --context . --destination sekharinweb/${IMG_NAME}:1.${BUILD_NUMBER}.0
             '''
+            stash(name: 'helm' , includes: '**/manifest/*')
           }
       }
     }
@@ -64,8 +65,11 @@ pipeline {
       }
       steps{
           container('helm'){
+            unstash(name: 'helm')
             sh '''
-            helm template ./manifest
+            tree
+            ls -l 
+            helm version
             '''
           }
       }
