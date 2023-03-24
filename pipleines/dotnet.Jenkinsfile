@@ -1,5 +1,5 @@
 @Library('first-small-lib') _
-
+def nexus = "http://34.89.102.18/repository/helm-hosted/"
 pipeline {
   agent {
     kubernetes {
@@ -24,8 +24,8 @@ pipeline {
     }
 
 
-    stage('Build') {
-      steps {
+    stage('Build') { ./kkk/
+      steps {lkj  
         container('dotnetcore') {
             sh '''
              dotnet restore
@@ -66,10 +66,13 @@ pipeline {
       steps{
           container('helm'){
             unstash(name: 'helm')
-            sh '''
-            ls -l 
-            helm template ./manifest
-            '''
+            withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) 
+            {
+              sh '''
+              helm package ./manifest --version=${BUILD_NUMBER} --debug
+              curl -u $USERNAME:$PASSWORD ${nexus} --upload-file dotnettestapi-${BUILD_NUMBER}.tgz -v 
+              '''
+            }
           }
       }
     }
