@@ -12,7 +12,7 @@ pipeline{
         steps{
             container('kaniko'){
                 sh '''
-                /kaniko/executor --context . --destination sekharinweb/utility:latest
+                /kaniko/executor --context . --dockerfile ./Dockerfile --destination sekharinweb/utility:latest
                 '''
             }
           }
