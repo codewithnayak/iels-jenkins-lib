@@ -65,7 +65,7 @@ pipeline {
       steps{
           container('helm'){
             sh '''
-            helm create ./manifest
+            helm template ./manifest
             '''
           }
       }
