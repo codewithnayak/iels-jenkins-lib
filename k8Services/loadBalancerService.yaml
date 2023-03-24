@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodeapp-svc
+  namespace: default
+spec:
+  selector:
+    app: nodeapp
+  type: LoadBalancer # Upto the cloud provider to configure this
+  sessionAffinity: None
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+  ports:
+    - name: HTTP
+      protocol: TCP
+      port: 80
+      targetPort: 8080

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodeapp-svc
+  namespace: default
+spec:
+  selector:
+    app: nodeapp-svc
+  type: ClusterIP #Accessible only inside the cluster
+  sessionAffinity: None
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+  ports:
+    - name: nodeapp-svc
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+#Can be accessed using nodeapp-svc.default.cluster.local dns name as well .
+#This is possible because of kube-dns, avilable in kube-system namespace.

@@ -49,6 +49,12 @@ spec:
   containers:
     - name: mongodb
       image: "mongo:latest"
+      livenessProbe:
+        httpGet:
+          path:
+            - /ready
+        initialDelaySeconds: 60
+        timeoutSeconds: 10
       resources:
         limits:
           cpu: 200m

@@ -1,0 +1,23 @@
+metadata:
+  name: nodeapp-svc
+  namespace: default
+spec:
+  selector:
+    app: nodeapp # App with the same level will be selected
+  type: NodePort #Accessible only inside the cluster
+  sessionAffinity: None # Could be clinetip as well .
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+  externalTrafficPolicy: Local # Will choose the pod in the same node (may be deprecated , need to check )
+  ports:
+    - name: nodeapp-svc
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+      # If you set the `spec.type` field to `NodePort` and you want a specific port number,
+      # you can specify a value in the `spec.ports[*].nodePort` field.
+      nodePort: 32011 # Can be accessed externally with node ip and this port
+
+#You set the type to NodePort and specify the node port this service should be bound to across all cluster nodes.
+#Specifying the port isn’t mandatory; Kubernetes will choose a random port if you omit it.
