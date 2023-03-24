@@ -67,9 +67,8 @@ pipeline {
           container('helm'){
             unstash(name: 'helm')
             sh '''
-            tree
             ls -l 
-            helm version
+            helm template ./manifest
             '''
           }
       }
