@@ -25,8 +25,8 @@ pipeline{
                     container(name: 'helm'){
                         sh """
                         echo '***** Deployment started ******'
-                        helm add repo nexus ${env.NEXUS_URL}
-                        helm update 
+                        helm repo add nexus ${env.NEXUS_URL}
+                        helm repo update 
 
                         helm upgrade --install dotnettestapi nexus/dotnettestapi \
                             --version ${params.CHART_VERSION} \
