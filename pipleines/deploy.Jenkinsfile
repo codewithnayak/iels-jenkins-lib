@@ -23,18 +23,21 @@ pipeline{
             steps{
                 script{
                     container(name: 'helm'){
-                        sh """
-                        echo '***** Deployment started ******'
-                        helm repo add nexus ${env.NEXUS_URL}
-                        helm repo update 
+                        withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) 
+                        {
+                            
+                            sh """
+                                helm repo add nexus ${env.NEXUS_URL} --username ${USERNAME} --password ${PASSWORD}
+                                helm repo update 
 
-                        helm upgrade --install dotnettestapi nexus/dotnettestapi \
-                            --version ${params.CHART_VERSION} \
-                            --set tag=${params.CHART_VERSION} \
-                            --install --force \
+                                helm upgrade --install dotnettestapi nexus/dotnettestapi \
+                                    --version ${params.CHART_VERSION} \
+                                    --set tag=${params.CHART_VERSION} \
+                                    --install --force --debug \
 
-                        echo '***** Deployment completed ******'
-                        """
+                            """
+                        }
+                        
                     }
                 
                 }
