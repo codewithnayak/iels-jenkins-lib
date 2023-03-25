@@ -1,5 +1,7 @@
 @Library('first-small-lib') _
-def nexus = "http://34.89.102.18/repository/helm-hosted/"
+
+def NEXUS_URL = 'http://34.89.102.18/repository/helm-hosted/'
+
 pipeline {
   agent {
     kubernetes {
@@ -66,11 +68,28 @@ pipeline {
       steps{
           container('helm'){
             unstash(name: 'helm')
+            sh '''
+              helm package ./manifest --version=1.${BUILD_NUMBER}.0 --debug
+              echo ${NEXUS_URL} 
+              '''
+
+              stash('chart',includes: '*.tgz')
+          }
+      }
+      stage('Push Chart'){
+      agent{
+          kubernetes{
+            yaml utilityPod()
+            retries 2
+          }
+      }
+      steps{
+          container('utility'){
+            unstash(name: 'chart')
             withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) 
             {
               sh '''
-              helm package ./manifest --version=${BUILD_NUMBER} --debug
-              curl -u $USERNAME:$PASSWORD ${nexus} --upload-file dotnettestapi-${BUILD_NUMBER}.tgz -v 
+              curl -u $USERNAME:$PASSWORD ${NEXUS_URL} --upload-file dotnettestapi-1.${BUILD_NUMBER}.0.tgz -v 
               '''
             }
           }
