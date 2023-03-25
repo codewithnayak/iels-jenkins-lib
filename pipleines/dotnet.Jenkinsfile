@@ -1,8 +1,10 @@
 @Library('first-small-lib') _
-
-def NEXUS_URL = "http://34.89.102.18/repository/helm-hosted/"
-
 pipeline {
+
+  environment{
+      NEXUS_URL = 'http://34.89.102.18/repository/helm-hosted/'
+  }
+
   agent {
     kubernetes {
       yaml dotnetKanikoPod()
@@ -70,8 +72,7 @@ pipeline {
             container('helm'){
             unstash(name: 'helm')
             sh '''
-              helm package ./manifest --version=1.${BUILD_NUMBER}.0 --debug
-              echo ${NEXUS_URL} 
+              helm package ./manifest --version=1.${BUILD_NUMBER}.0
               '''
 
               stash(name:'chart',includes: '*.tgz')
@@ -93,9 +94,9 @@ pipeline {
             unstash(name: 'chart')
             withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) 
             {
-              sh '''
-              curl -u $USERNAME:$PASSWORD ${NEXUS_URL} --upload-file dotnettestapi-1.${BUILD_NUMBER}.0.tgz -v 
-              '''
+              sh """
+              curl -u ${USERNAME}:${PASSWORD} ${env.NEXUS_URL} --upload-file dotnettestapi-1.${BUILD_NUMBER}.0.tgz -v 
+              """
             }
           }
         }
