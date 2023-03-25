@@ -76,7 +76,9 @@ pipeline {
               stash('chart',includes: '*.tgz')
           }
       }
-      stage('Push Chart'){
+    }
+      
+    stage('Push Chart'){
       agent{
           kubernetes{
             yaml utilityPod()
@@ -95,6 +97,7 @@ pipeline {
           }
       }
     }
+    
   }
 }
 
