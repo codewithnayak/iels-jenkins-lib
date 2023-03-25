@@ -20,7 +20,8 @@ pipeline{
 
     stages{
         stage("Deploy"){
-            script{
+            steps{
+                script{
                 sh """
                 echo '***** Deployment started ******'
                 helm add repo nexus ${env.NEXUS_URL}
@@ -33,6 +34,7 @@ pipeline{
 
                 echo '***** Deployment completed ******'
                 """
+            }
             }
         }
     }
