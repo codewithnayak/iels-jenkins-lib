@@ -1,6 +1,6 @@
 @Library('first-small-lib') _
 
-def NEXUS_URL = 'http://34.89.102.18/repository/helm-hosted/'
+def NEXUS_URL = "http://34.89.102.18/repository/helm-hosted/"
 
 pipeline {
   agent {
@@ -66,7 +66,8 @@ pipeline {
           }
       }
       steps{
-          container('helm'){
+          script{
+            container('helm'){
             unstash(name: 'helm')
             sh '''
               helm package ./manifest --version=1.${BUILD_NUMBER}.0 --debug
@@ -75,6 +76,7 @@ pipeline {
 
               stash(name:'chart',includes: '*.tgz')
           }
+        }
       }
     }
       
@@ -86,7 +88,8 @@ pipeline {
           }
       }
       steps{
-          container('utility'){
+          script{
+            container('utility'){
             unstash(name: 'chart')
             withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) 
             {
@@ -95,6 +98,7 @@ pipeline {
               '''
             }
           }
+        }
       }
     }
     
