@@ -73,7 +73,7 @@ pipeline {
               echo ${NEXUS_URL} 
               '''
 
-              stash('chart',includes: '*.tgz')
+              stash(name:'chart',includes: '*.tgz')
           }
       }
     }
