@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Shell script to install a helm chart .
 # Params used
 
