@@ -16,6 +16,6 @@ helm upgrade dotnettestapi nexus/dotnettestapi \
     --namespace dev \
     --version ${CHART_VERSION} \
     --set tag=${CHART_VERSION} \
-    --install --force --debug --dry-run
+    --install --force --debug
 
 echo '***** Helm installation completed *****'
