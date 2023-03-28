@@ -55,7 +55,7 @@ pipeline {
             sh '''
             /kaniko/executor --context . --destination sekharinweb/${IMG_NAME}:1.${BUILD_NUMBER}.0
             '''
-            stash(name: 'helm' , includes: '**/manifest/*')
+            stash(name: 'helm' , includes: '**/manifest/')
           }
       }
     }
@@ -72,7 +72,7 @@ pipeline {
             container('helm'){
             unstash(name: 'helm')
             sh '''
-              helm package ./manifest --version=1.${BUILD_NUMBER}.0
+              helm package ./manifest/ --version=1.${BUILD_NUMBER}.0 
               '''
 
               stash(name:'chart',includes: '*.tgz')
