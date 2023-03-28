@@ -1,6 +1,6 @@
 #!/bin/bash
 # Shell script to install a helm chart .
-#
+# Params used
 
 NEXUS_URL=$1
 PASSWORD=$3
