@@ -12,7 +12,7 @@ echo '***** Helm installation started *****'
 
 helm repo add nexus ${NEXUS_URL} --username ${USERNAME} --password ${PASSWORD}
 helm repo update
-helm upgrade --name dotnettestapi nexus/dotnettestapi \
+helm upgrade dotnettestapi nexus/dotnettestapi \
     --namespace dev \
     --version ${CHART_VERSION} \
     --set tag=${CHART_VERSION} \
