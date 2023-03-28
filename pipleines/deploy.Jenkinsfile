@@ -28,7 +28,8 @@ pipeline{
                          passwordVariable: 'PASSWORD')]) 
                         {
                             dir('resources'){
-                                sh "./deploy.sh ${env.NEXUS_URL} ${USERNAME} ${PASSWORD} ${params.CHART_VERSION} "
+                                
+                                sh(script: "./deploy.sh ${env.NEXUS_URL} ${USERNAME} ${PASSWORD} ${params.CHART_VERSION}")
                             }
                         }
                         
