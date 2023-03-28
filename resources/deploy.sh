@@ -1,4 +1,5 @@
 #!/bin/sh
+# As alpine image , it does not have bash .Need to install bash if required .
 # Shell script to install a helm chart .
 # Params used
 
@@ -11,9 +12,10 @@ echo '***** Helm installation started *****'
 
 helm repo add nexus ${NEXUS_URL} --username ${USERNAME} --password ${PASSWORD}
 helm repo update
-helm upgrade --install dotnettestapi nexus/dotnettestapi \
+helm upgrade --name dotnettestapi nexus/dotnettestapi \
+    --namespace dev \
     --version ${CHART_VERSION} \
     --set tag=${CHART_VERSION} \
-    --install --force --debug
+    --install --force --debug --dry-run
 
 echo '***** Helm installation completed *****'
