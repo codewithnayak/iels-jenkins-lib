@@ -14,7 +14,7 @@ pipeline {
 
   parameters{
       string(name:'BRANCH_NAME', defaultValue: 'main' , description: 'he branch to be built')
-      string(name:'SERVICE_NAME',defaultValue:'',description: 'The service to be built.')
+      string(name:'SERVICE_NAME',defaultValue:'dotnet-helm-k8-ci-cd',description: 'The service to be built.')
       string(name:'IMG_VERSION', defaultValue:'', description: 'The image version , if not provided it will be the build number.')
       string(name:'IMG_NAME',defaultValue:'dotnettestapi',description:'Give the desired image name here.')
   }
