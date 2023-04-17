@@ -1,5 +1,32 @@
 @Library('first-small-lib') _
 
+
+def constructTags(servcieTagValue , featureTagValue){
+    def serviceTagResult
+    def featureTagResult
+
+    if(!servcieTagValue && !featureTagValue){
+        throw new Exception('Need to select at least one tag')
+    }
+
+    if(servcieTagValue){
+        serviceTagResult = servcieTagValue.trim().split(',').collect{ it => '@'+it }.join(' or ')
+    }
+
+    if(featureTagValue){
+        featureTagResult = featureTagValue.trim().split(',').collect{ it=> '@'+it }.join(' or ')
+    }
+
+    if(serviceTagResult.contains('or')){
+        serviceTagResult = '('+ serviceTagResult +')'
+    }
+
+    if(featureTagResult.contains('or')){
+        featureTagResult = '('+ featureTagResult +')'
+    }
+
+    return  serviceTagResult + (featureTagResult ? featureTagResult : "");
+}
 pipeline{
 
     environment{
@@ -9,7 +36,8 @@ pipeline{
     parameters{
         string(name:'CHART_VERSION' , defaultValue: '' , description: 'The chart to be deployed , without tgz extension')
         booleanParam(name:'APPROVED' , defaultValue: false , description: 'Approval for the deployment')
-        extendedChoice(name:'TAGS',defaultValue: 'regression',multiSelectDelimiter: ',',type:'PT_CHECKBOX' , value: 'a,b,c,d')
+        extendedChoice(name:'FEATURE_TAGS',defaultValue: 'regression',multiSelectDelimiter: ',',type:'PT_CHECKBOX' , value: 'someservcie,anotherservice')
+        extendedChoice(name:'SERVICE_TAGS',defaultValue: 'somefeature',multiSelectDelimiter: ',',type:'PT_CHECKBOX' , value: 'somefeature,anotherfeature')
     }
 
     agent{
@@ -28,12 +56,11 @@ pipeline{
                          usernameVariable: 'USERNAME', 
                          passwordVariable: 'PASSWORD')]) 
                         {
-                            dir('resources'){
-                                sh """
-                                echo ${params.TAGS}
-                                """
-                                sh(script: "./deploy.sh ${env.NEXUS_URL} ${USERNAME} ${PASSWORD} ${params.CHART_VERSION}")
-                            }
+                            println params.SERVICE_TAGS
+                            println params.FEATURE_TAGS
+
+                            def resultantTags = constructTags(params.SERVICE_TAGS , params.FEATURE_TAGS)
+                            println resultantTags 
                         }
                         
                     }
