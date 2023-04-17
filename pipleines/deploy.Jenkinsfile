@@ -50,9 +50,7 @@ pipeline{
                          usernameVariable: 'USERNAME', 
                          passwordVariable: 'PASSWORD')]) 
                         {
-
-                            def resultantTags = buildTags(${params.SERVICE_TAGS},${params.FEATURE_TAGS})
-                            println resultantTags 
+                            println buildTags(${params.SERVICE_TAGS},${params.FEATURE_TAGS}) 
                         }
                         
                     }
