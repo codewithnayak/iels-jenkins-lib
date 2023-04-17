@@ -10,11 +10,11 @@ def constructTags(servcieTagValue , featureTagValue){
     }
 
     if(servcieTagValue){
-        serviceTagResult = servcieTagValue.trim().split(',').collect{ it => '@'+it }.join(' or ')
+        serviceTagResult = servcieTagValue.trim().split(',').collect{'@'+it }.join(' or ')
     }
 
     if(featureTagValue){
-        featureTagResult = featureTagValue.trim().split(',').collect{ it=> '@'+it }.join(' or ')
+        featureTagResult = featureTagValue.trim().split(',').collect{ '@'+it }.join(' or ')
     }
 
     if(serviceTagResult.contains('or')){
