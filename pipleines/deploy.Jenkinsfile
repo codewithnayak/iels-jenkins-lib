@@ -1,32 +1,26 @@
 @Library('first-small-lib') _
 
 
-def constructTags(servcieTagValue , featureTagValue){
-    def serviceTagResult
-    def featureTagResult
-
+​def buildTags(servcieTagValue , featureTagValue){    
+   
     if(!servcieTagValue && !featureTagValue){
         throw new Exception('Need to select at least one tag')
     }
-
-    if(servcieTagValue){
-        serviceTagResult = servcieTagValue.trim().split(',').collect{'@'+it }.join(' or ')
-    }
-
-    if(featureTagValue){
-        featureTagResult = featureTagValue.trim().split(',').collect{ '@'+it }.join(' or ')
-    }
-
-    if(serviceTagResult.contains('or')){
-        serviceTagResult = '('+ serviceTagResult +')'
-    }
-
-    if(featureTagResult.contains('or')){
-        featureTagResult = '('+ featureTagResult +')'
-    }
-
-    return  serviceTagResult + (featureTagResult ? featureTagResult : "");
+    def serviceTagResult = constructTags(servcieTagValue)
+    def featureTagResult = constructTags(featureTagValue)
+    if(!serviceTagResult) return featureTagResult 
+    return  '{' + serviceTagResult + (featureTagResult ? ' and '+ featureTagResult : "") + '}'
 }
+
+def constructTags(tagValues){
+   if(!tagValues) return null
+   def result = tagValues.trim().split(',').collect{'@'+it }.join(' or ')
+   if(result.contains(' or ')){
+        result = '('+ result +')'
+    }
+   return result
+}
+
 pipeline{
 
     environment{
@@ -59,7 +53,7 @@ pipeline{
                             println params.SERVICE_TAGS
                             println params.FEATURE_TAGS
 
-                            def resultantTags = constructTags(params.SERVICE_TAGS , params.FEATURE_TAGS)
+                            def resultantTags = buildTags(params.SERVICE_TAGS , params.FEATURE_TAGS)
                             println resultantTags 
                         }
                         
