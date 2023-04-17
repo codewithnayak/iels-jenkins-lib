@@ -1,25 +1,7 @@
 @Library('first-small-lib') _
 
 
-​def buildTags(servcieTagValue,featureTagValue){    
-   
-    if(!servcieTagValue && !featureTagValue){
-        throw new Exception('Need to select at least one tag')
-    }
-    def serviceTagResult = constructTags(servcieTagValue)
-    def featureTagResult = constructTags(featureTagValue)
-    if(!serviceTagResult) return featureTagResult 
-    return  '{' + serviceTagResult + (featureTagResult ? ' and '+ featureTagResult : "") + '}'
-}
 
-def constructTags(tagValues){
-   if(!tagValues) return null
-   def result = tagValues.trim().split(',').collect{'@'+it }.join(' or ')
-   if(result.contains(' or ')){
-        result = '('+ result +')'
-    }
-   return result
-}
 
 pipeline{
 
@@ -50,7 +32,7 @@ pipeline{
                          usernameVariable: 'USERNAME', 
                          passwordVariable: 'PASSWORD')]) 
                         {
-                            println buildTags(${params.SERVICE_TAGS},${params.FEATURE_TAGS}) 
+                            println buildTags(params.SERVICE_TAGS,params.FEATURE_TAGS) 
                         }
                         
                     }
@@ -62,3 +44,20 @@ pipeline{
 
 }
 
+​def buildTags(servcieTagValue,featureTagValue){
+    if(!servcieTagValue && !featureTagValue){
+        throw new Exception('Need to select at least one tag')
+    }
+    def serviceTagResult = constructTags(servcieTagValue)
+    def featureTagResult = constructTags(featureTagValue)
+    if(!serviceTagResult) return featureTagResult 
+    return '{' + serviceTagResult + (featureTagResult ? ' and '+ featureTagResult : "") + '}'
+}
+def constructTags(tagValues){
+   if(!tagValues) return null
+   def result = tagValues.trim().split(',').collect{'@'+it }.join(' or ')
+   if(result.contains(' or ')){
+        result = '('+ result +')'
+    }
+   return result
+}
