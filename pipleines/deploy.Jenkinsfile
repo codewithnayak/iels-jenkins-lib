@@ -1,7 +1,7 @@
 @Library('first-small-lib') _
 
 
-​def buildTags(servcieTagValue , featureTagValue){    
+​def buildTags(servcieTagValue,featureTagValue){    
    
     if(!servcieTagValue && !featureTagValue){
         throw new Exception('Need to select at least one tag')
@@ -50,10 +50,8 @@ pipeline{
                          usernameVariable: 'USERNAME', 
                          passwordVariable: 'PASSWORD')]) 
                         {
-                            println params.SERVICE_TAGS
-                            println params.FEATURE_TAGS
 
-                            def resultantTags = buildTags(params.SERVICE_TAGS , params.FEATURE_TAGS)
+                            def resultantTags = buildTags(params.SERVICE_TAGS,params.FEATURE_TAGS)
                             println resultantTags 
                         }
                         
