@@ -9,7 +9,7 @@ pipeline{
     parameters{
         string(name:'CHART_VERSION' , defaultValue: '' , description: 'The chart to be deployed , without tgz extension')
         booleanParam(name:'APPROVED' , defaultValue: false , description: 'Approval for the deployment')
-        extendedChoice(name:'abcd',defaultValue: 'regression',multiSelectDelimeter: ',',type:'PT_CHECKBOX')
+        extendedChoice(name:'TAGS',defaultValue: 'regression',multiSelectDelimiter: ',',type:'PT_CHECKBOX' , value: 'a,b,c,d')
     }
 
     agent{
@@ -29,6 +29,9 @@ pipeline{
                          passwordVariable: 'PASSWORD')]) 
                         {
                             dir('resources'){
+                                sh """
+                                echo ${params.TAGS}
+                                """
                                 sh(script: "./deploy.sh ${env.NEXUS_URL} ${USERNAME} ${PASSWORD} ${params.CHART_VERSION}")
                             }
                         }
