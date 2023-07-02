@@ -9,6 +9,10 @@ pipeline{
         }
     }
 
+    options {
+        skipDefaultCheckout(true)
+    }
+
     stages{
         stage("Init"){
             steps{
@@ -23,7 +27,6 @@ pipeline{
     }
 
     post {
-        // Clean after build
         always {
             cleanWs(cleanWhenNotBuilt: false,
                     deleteDirs: true,
