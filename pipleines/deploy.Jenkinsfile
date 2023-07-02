@@ -42,22 +42,16 @@ pipeline{
         }
     }
 
-}
+    post {
+        // Clean after build
+        always {
+            cleanWs(cleanWhenNotBuilt: false,
+                    deleteDirs: true,
+                    disableDeferredWipeout: true,
+                    notFailBuild: true,
+                    patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
+                               [pattern: '.propsfile', type: 'EXCLUDE']])
+        }
+    }
 
-​def buildTags(servcieTagValue,featureTagValue){
-    if(!servcieTagValue && !featureTagValue){
-        throw new Exception('Need to select at least one tag')
-    }
-    def serviceTagResult = constructTags(servcieTagValue)
-    def featureTagResult = constructTags(featureTagValue)
-    if(!serviceTagResult) return featureTagResult 
-    return '{' + serviceTagResult + (featureTagResult ? ' and '+ featureTagResult : "") + '}'
-}
-def constructTags(tagValues){
-   if(!tagValues) return null
-   def result = tagValues.trim().split(',').collect{'@'+it }.join(' or ')
-   if(result.contains(' or ')){
-        result = '('+ result +')'
-    }
-   return result
 }
