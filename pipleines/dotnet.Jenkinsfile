@@ -1,9 +1,6 @@
 @Library('first-small-lib') _
 pipeline {
 
-  environment{
-      NEXUS_URL = 'http://34.89.102.18/repository/helm-hosted/'
-  }
 
   agent {
     kubernetes {
@@ -112,8 +109,10 @@ pipeline {
 
       
     }
-    post {
-        // Clean after build
+    
+  }
+  
+  post {
         always {
             cleanWs(cleanWhenNotBuilt: false,
                     deleteDirs: true,
@@ -123,6 +122,5 @@ pipeline {
                                [pattern: '.propsfile', type: 'EXCLUDE']])
         }
     }
-  }
 }
 
