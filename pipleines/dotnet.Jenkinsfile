@@ -53,7 +53,7 @@ pipeline {
       steps{
           container('kaniko'){
             sh '''
-            /kaniko/executor --context . --destination sekharinweb/${IMG_NAME}:1.${BUILD_NUMBER}.0
+            /kaniko/executor --context . --destination europe-west2-docker.pkg.dev/ielsdev/ielsgcr/${IMG_NAME}:1.${BUILD_NUMBER}.0
             '''
             stash(name: 'helm' , includes: '**/manifest/')
           }
