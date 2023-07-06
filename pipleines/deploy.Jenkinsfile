@@ -23,6 +23,10 @@ pipeline{
         }
     }
 
+    options {
+        skipDefaultCheckout(true)
+    }
+    
     stages{
         stage("Deploy"){
             steps{

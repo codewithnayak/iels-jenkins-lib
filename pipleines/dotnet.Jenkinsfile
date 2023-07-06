@@ -12,6 +12,10 @@ pipeline {
     }
   }
 
+  options {
+        skipDefaultCheckout(true)
+    }
+
   parameters{
       string(name:'BRANCH_NAME', defaultValue: 'main' , description: 'he branch to be built')
       string(name:'SERVICE_NAME',defaultValue:'dotnet-helm-k8-ci-cd',description: 'The service to be built.')
