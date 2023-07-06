@@ -45,21 +45,25 @@ pipeline {
 
     stage('Test'){
       steps{
-        container('dotnetcore'){
-          sh '''
-             dotnet test
-            '''
+            script{
+              container('dotnetcore'){
+              sh '''
+                dotnet test
+                '''
+            }
         }
       }
     }
 
     stage('Build And Push Image'){
       steps{
-          container('kaniko'){
+          script{
+            container('kaniko'){
             sh '''
             /kaniko/executor --context . --destination europe-west2-docker.pkg.dev/ielsdev/ielsgcr/${IMG_NAME}:1.${BUILD_NUMBER}.0
             '''
             stash(name: 'helm' , includes: '**/manifest/')
+          }
           }
       }
     }
