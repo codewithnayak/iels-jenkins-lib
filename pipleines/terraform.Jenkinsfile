@@ -5,7 +5,7 @@ library identifier: 'custom-lib@main', retriever: modernSCM(
 pipeline{
 
     agent{
-        kubernetes{
+        kubeagent{
             yaml terraformPod()
             retries 2
         }
