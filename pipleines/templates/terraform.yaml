@@ -5,6 +5,8 @@ metadata:
   labels:
     name: terraform
 spec:
+  serviceAccountName: terraform-service-account
+  automountServiceAccountToken: false
   containers:
     - name: jnlp
       image: jenkins/inbound-agent:latest
