@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: terraform
+  labels:
+    name: terraform
+spec:
+  containers:
+    - name: jnlp
+      image: jenkins/inbound-agent:latest
+    - name: terraform
+      image: hashicorp/terraform
+      command: ["/bin/sh", "-c"]
+      args:
+        - cat
+      tty: true

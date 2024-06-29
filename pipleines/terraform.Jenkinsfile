@@ -6,7 +6,7 @@ pipeline{
 
     agent{
         kubernetes{
-            yaml terraformPod()
+            yamlFile 'pipelines/template/terraform.yaml'
             retries 2
         }
     }
