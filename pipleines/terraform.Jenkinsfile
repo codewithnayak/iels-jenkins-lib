@@ -3,7 +3,7 @@ pipeline{
 
     agent{
         kubernetes{
-            yamlFile './pipelines/template/terraform.yaml'
+            yamlFile 'pipelines/template/terraform.yaml'
             retries 2
         }
     }
@@ -13,6 +13,13 @@ pipeline{
     }
 
     stages{
+        stage("Env"){
+            steps{
+                script{
+                    sh 'ls -l '
+                }
+            }
+        }
         stage("Init"){
             steps{
                 script{
