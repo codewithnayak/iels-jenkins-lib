@@ -30,8 +30,6 @@ pipeline{
                         dir('bucket') {
                             sh('terraform version')
                             sh 'ls -l '
-                            sh 'cd bucket'
-                            sh 'ls -l '
                             sh 'terraform init'
                         }
                         
