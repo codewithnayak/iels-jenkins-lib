@@ -13,12 +13,25 @@ pipeline{
     }
 
     stages{
-        
+        stage('Git Checkout') {
+            steps {
+                checkout([$class: 'GitSCM',
+                          branches: [[name: '*/main']],
+                          userRemoteConfigs: [[
+                              url: 'https://github.com/codewithnayak/iels-resources-gcp.git',  // Git repository URL
+                          ]]
+                ])
+            }
+        }
         stage("Init"){
             steps{
                 script{
                     container(name: 'terraform'){
                         sh('terraform version')
+                        sh 'ls -l '
+                        sh 'cd bucket'
+                        sh 'ls -l '
+                        sh 'terraform init'
                     }
                 
                 }
