@@ -1,6 +1,3 @@
-library identifier: 'custom-lib@main', retriever: modernSCM(
-  [$class: 'GitSCMSource',
-   remote: 'https://github.com/codewithnayak/iels-jenkins-shared.git'])
 
 pipeline{
 
