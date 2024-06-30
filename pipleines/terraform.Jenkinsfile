@@ -31,6 +31,11 @@ pipeline{
                             sh('terraform version')
                             sh 'ls -l '
                             sh 'terraform init'
+                            sh '''
+                            terraform init
+                            terraform plan 
+                            terraform apply
+                            '''
                         }
                         
                     }
