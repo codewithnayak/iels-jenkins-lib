@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ServiceAccount
+automountServiceAccountToken: false
+metadata:
+  name: workload-service-account
+  namespace: jenkins
+  annotations:
+    iam.gke.io/gcp-service-account: workload-test-svc@fourth-cirrus-422013.iam.gserviceaccount.com

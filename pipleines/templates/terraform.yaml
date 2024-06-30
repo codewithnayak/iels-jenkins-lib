@@ -16,9 +16,3 @@ spec:
       args:
         - cat
       tty: true
-    - name: curl
-      image: curlimages/curl
-      command: ["sh", "-c"]
-      args:
-        - cat
-      tty: true
