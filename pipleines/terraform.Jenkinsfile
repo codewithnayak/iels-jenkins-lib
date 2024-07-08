@@ -28,12 +28,9 @@ pipeline{
                 script{
                     container(name: 'terraform'){
                         dir('bucket') {
-                            sh('terraform version')
-                            sh 'ls -l '
-                            sh 'terraform init'
                             sh """
-                            terraform init
-                            terraform plan  -out=tfplan -input=false -var region='europe-west2'
+                            terraform init -input=false
+                            terraform plan -out=tfplan -input=false -var region='europe-west2'
                             terraform apply tfplan -auto-approve -input=false
                             """
                         }
