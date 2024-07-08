@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-bash-pod
+  namespace: bash-script
+spec:
+  containers:
+    - name: my-bash-container
+      image: bash
+      command: ["sleep", "infinity"]

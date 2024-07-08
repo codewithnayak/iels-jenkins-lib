@@ -31,11 +31,11 @@ pipeline{
                             sh('terraform version')
                             sh 'ls -l '
                             sh 'terraform init'
-                            sh '''
+                            sh """
                             terraform init
-                            terraform plan 
-                            terraform apply
-                            '''
+                            terraform plan  -out=tfplan -input=false -var region='europe-west2'
+                            terraform apply tfplan -auto-approve -input=false
+                            """
                         }
                         
                     }
