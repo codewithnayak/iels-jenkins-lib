@@ -10,6 +10,7 @@ pipeline{
 
     options {
         skipDefaultCheckout(true)
+        ansiColor('xterm')
     }
 
     stages{
@@ -31,7 +32,7 @@ pipeline{
                             sh """
                             terraform init -input=false
                             terraform plan -out=tfplan -input=false -var region='europe-west2'
-                            terraform apply tfplan
+                            terraform apply tfplan -auto-approve -input=false
                             """
                         }
                         
