@@ -7,7 +7,7 @@ pipeline {
 
   agent {
     kubernetes {
-      yaml dotnetKanikoPod()
+      yaml dotnetBuildPod()
       retries 2
     }
   }
