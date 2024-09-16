@@ -1,4 +1,4 @@
-library identifier: 'jenkins-shared@master', retriever: modernSCM(
+library identifier: 'jenkins-shared@main', retriever: modernSCM(
   [$class: 'GitSCMSource',
    remote: 'https://github.com/codewithnayak/iels-jenkins-shared.git'])
 
