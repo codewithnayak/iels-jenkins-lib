@@ -1,4 +1,7 @@
-@Library('first-small-lib') _
+library identifier: 'jenkins-shared@master', retriever: modernSCM(
+  [$class: 'GitSCMSource',
+   remote: 'https://github.com/codewithnayak/iels-jenkins-shared.git'])
+
 pipeline {
 
 
@@ -52,63 +55,63 @@ pipeline {
       }
     }
 
-    stage('Build And Push Image'){
-      steps{
-          script{
-            container('kaniko'){
-            sh '''
-            /kaniko/executor --context . --destination sekharinweb/${IMG_NAME}:1.${BUILD_NUMBER}.0
-            '''
-            stash(name: 'helm' , includes: '**/manifest/')
-          }
-          }
-      }
-    }
+    // stage('Build And Push Image'){
+    //   steps{
+    //       script{
+    //         container('kaniko'){
+    //         sh '''
+    //         /kaniko/executor --context . --destination sekharinweb/${IMG_NAME}:1.${BUILD_NUMBER}.0
+    //         '''
+    //         stash(name: 'helm' , includes: '**/manifest/')
+    //       }
+    //       }
+    //   }
+    // }
 
-    stage('Package'){
-      agent{
-          kubernetes{
-            yaml helmPod()
-            retries 2
-          }
-      }
-      steps{
-          script{
-            container('helm'){
-            unstash(name: 'helm')
-            sh '''
-              helm package ./manifest/ --version=1.${BUILD_NUMBER}.0 
-              '''
+    // stage('Package'){
+    //   agent{
+    //       kubernetes{
+    //         yaml helmPod()
+    //         retries 2
+    //       }
+    //   }
+    //   steps{
+    //       script{
+    //         container('helm'){
+    //         unstash(name: 'helm')
+    //         sh '''
+    //           helm package ./manifest/ --version=1.${BUILD_NUMBER}.0 
+    //           '''
 
-              stash(name:'chart',includes: '*.tgz')
-          }
-        }
-      }
-    }
+    //           stash(name:'chart',includes: '*.tgz')
+    //       }
+    //     }
+    //   }
+    // }
       
-    stage('Push Chart'){
-      agent{
-          kubernetes{
-            yaml utilityPod()
-            retries 2
-          }
-      }
-      steps{
-          script{
-            container('utility'){
-            unstash(name: 'chart')
-            withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) 
-            {
-              sh """
-              curl -u ${USERNAME}:${PASSWORD} ${env.NEXUS_URL} --upload-file dotnettestapi-1.${BUILD_NUMBER}.0.tgz -v 
-              """
-            }
-          }
-        }
-      }
+    // stage('Push Chart'){
+    //   agent{
+    //       kubernetes{
+    //         yaml utilityPod()
+    //         retries 2
+    //       }
+    //   }
+    //   steps{
+    //       script{
+    //         container('utility'){
+    //         unstash(name: 'chart')
+    //         withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) 
+    //         {
+    //           sh """
+    //           curl -u ${USERNAME}:${PASSWORD} ${env.NEXUS_URL} --upload-file dotnettestapi-1.${BUILD_NUMBER}.0.tgz -v 
+    //           """
+    //         }
+    //       }
+    //     }
+    //   }
 
       
-    }
+    // }
     
   }
 
