@@ -60,10 +60,7 @@ pipeline {
           script{
             container('kaniko'){
               sh '''
-              /kaniko/executor 
-              --dockerfile=Dockerfile 
-              --context dir://workspace  
-              --destination europe-west2-docker.pkg.dev/primeval-nectar-431120-j5/iels-artifact-repository/${IMG_NAME}:1.${BUILD_NUMBER}.0
+              /kaniko/executor  --dockerfile=Dockerfile --context dir://workspace  --destination europe-west2-docker.pkg.dev/primeval-nectar-431120-j5/iels-artifact-repository/${IMG_NAME}:1.${BUILD_NUMBER}.0
               '''
              // stash(name: 'helm' , includes: '**/manifest/')
             }
