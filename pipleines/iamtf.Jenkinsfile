@@ -31,7 +31,7 @@ pipeline{
                         dir('iam') {
                             sh """
                             terraform init -input=false
-                            terraform plan -out=tfplan -input=false -var region='europe-west2'
+                            terraform plan -out=tfplan -input=false
                             """
                         }
                         
