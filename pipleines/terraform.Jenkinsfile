@@ -40,6 +40,38 @@ pipeline{
                 }
             }
         }
+
+        stage("Plan"){
+            steps{
+                script{
+                    container(name: 'terraform'){
+                        dir('bucket') {
+                            sh """
+                            terraform plan -out=tfplan -input=false
+                            """
+                        }
+                        
+                    }
+                
+                }
+            }
+        }
+
+        stage("Apply"){
+            steps{
+                script{
+                    container(name: 'terraform'){
+                        dir('bucket') {
+                            sh """
+                            terraform apply tfplan -input=false
+                            """
+                        }
+                        
+                    }
+                
+                }
+            }
+        }
     }
 
     post {
