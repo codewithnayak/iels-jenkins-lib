@@ -56,7 +56,7 @@ pipeline{
                 script{
                     container(name: 'terraform'){
                         dir('iam') {
-                            sh("terraform apply tfplan -input=false")
+                            sh("terraform apply tfplan")
                         }
                         
                     }
