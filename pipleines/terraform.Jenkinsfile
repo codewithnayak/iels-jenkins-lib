@@ -63,7 +63,7 @@ pipeline{
                     container(name: 'terraform'){
                         dir('iam') {
                             sh """
-                            terraform apply tfplan -input=false
+                            terraform apply "tfplan"
                             """
                         }
                         
