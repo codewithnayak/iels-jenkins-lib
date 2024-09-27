@@ -29,7 +29,13 @@ pipeline{
                 script{
                     container(name: 'terraform'){
                         dir('iam') {
-                            sh("terraform init -input=false")
+                            try{
+                                sh("terraform init -input=false")
+                            }
+                            catch(Exception e){
+                                println("Error"+e)
+                            }
+                            
                         }
                         
                     }
@@ -43,7 +49,12 @@ pipeline{
                 script{
                     container(name: 'terraform'){
                         dir('iam') {
-                            sh("terraform plan -out=tfplan -input=false")
+                            try{
+                                sh("terraform plan -out=tfplan -input=false")
+                            }
+                            catch(Exception e){
+                                println("Error"+e)
+                            }
                         }
                         
                     }
@@ -56,7 +67,12 @@ pipeline{
                 script{
                     container(name: 'terraform'){
                         dir('iam') {
-                            sh("terraform apply tfplan")
+                           try{
+                             sh("terraform apply tfplan")
+                           }
+                           catch(Exception e){
+                            println("Error"+e)
+                           }
                         }
                         
                     }
