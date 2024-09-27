@@ -28,7 +28,7 @@ pipeline{
             steps{
                 script{
                     container(name: 'terraform'){
-                        dir('bucket') {
+                        dir('iam') {
                             sh """
                             terraform init -input=false
                             terraform plan -out=tfplan -input=false -var region='europe-west2'
@@ -45,7 +45,7 @@ pipeline{
             steps{
                 script{
                     container(name: 'terraform'){
-                        dir('bucket') {
+                        dir('iam') {
                             sh """
                             terraform plan -out=tfplan -input=false
                             """
@@ -61,7 +61,7 @@ pipeline{
             steps{
                 script{
                     container(name: 'terraform'){
-                        dir('bucket') {
+                        dir('iam') {
                             sh """
                             terraform apply tfplan -input=false
                             """
