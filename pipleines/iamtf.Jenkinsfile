@@ -29,10 +29,34 @@ pipeline{
                 script{
                     container(name: 'terraform'){
                         dir('iam') {
-                            sh """
-                            terraform init -input=false
-                            terraform plan -out=tfplan -input=false
-                            """
+                            sh("terraform init -input=false")
+                        }
+                        
+                    }
+                
+                }
+            }
+        }
+
+        stage("Plan"){
+            steps{
+                script{
+                    container(name: 'terraform'){
+                        dir('iam') {
+                            sh("terraform plan -out=tfplan -input=false")
+                        }
+                        
+                    }
+                
+                }
+            }
+        }
+        stage("Apply"){
+            steps{
+                script{
+                    container(name: 'terraform'){
+                        dir('iam') {
+                            sh("terraform apply tfplan -input=false")
                         }
                         
                     }
