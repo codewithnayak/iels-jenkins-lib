@@ -13,6 +13,11 @@ pipeline{
         ansiColor('xterm')
     }
 
+    parameters {
+        booleanParam(name: 'APPLY_TERRAFORM', defaultValue: false, description: 'Apply Terraform changes')
+        booleanParam(name: 'DESTROY_TERRAFORM', defaultValue: false, description: 'Destroy Terraform infrastructure')
+    }
+
     stages{
         stage('Git Checkout') {
             steps {
@@ -29,13 +34,7 @@ pipeline{
                 script{
                     container(name: 'terraform'){
                         dir('gce') {
-                            try{
-                                sh("terraform init -input=false")
-                            }
-                            catch(Exception e){
-                                println("Error"+e)
-                            }
-                            
+                            sh("terraform init -input=false")
                         }
                         
                     }
@@ -49,12 +48,7 @@ pipeline{
                 script{
                     container(name: 'terraform'){
                         dir('gce') {
-                            try{
-                                sh("terraform plan -out=tfplan -input=false")
-                            }
-                            catch(Exception e){
-                                println("Error"+e)
-                            }
+                            sh("terraform plan -out=tfplan -input=false")
                         }
                         
                     }
@@ -63,16 +57,37 @@ pipeline{
             }
         }
         stage("Apply"){
+            when {
+                expression {
+                    return params.APPLY_TERRAFORM == true
+                }
+            }
             steps{
                 script{
                     container(name: 'terraform'){
                         dir('gce') {
-                           try{
-                             sh("terraform apply tfplan")
-                           }
-                           catch(Exception e){
-                            println("Error"+e)
-                           }
+                           sh("terraform apply tfplan")
+                        }
+                        
+                    }
+                
+                }
+            }
+        }
+
+        stage("Destroy"){
+            when {
+                expression {
+                    return params.DESTROY_TERRAFORM == true
+                }
+            }
+            steps{
+                script{
+                    container(name: 'terraform'){
+                        dir('gce') {
+                           sh '''
+                              terraform destroy -auto-approve
+                             '''
                         }
                         
                     }
@@ -90,6 +105,14 @@ pipeline{
                     notFailBuild: true,
                     patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
                                [pattern: '.propsfile', type: 'EXCLUDE']])
+        }
+
+        failure {
+            echo 'Pipeline failed!'
+        }
+
+        success {
+            echo 'Pipeline succeeded!'
         }
     }
 
