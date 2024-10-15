@@ -4,7 +4,7 @@ set -e
 echo "***** Conect to cluster ******"
 
 ##This will change based on your cluater
-gcloud container clusters get-credentials iels-gke-eu-cluster --zone europe-west2-a --project primeval-nectar-431120-j5
+gcloud container clusters get-credentials iels-gke-oct-jan --zone europe-west1-b --project keen-ally-438611-t7
 
 echo "***** TRY TO INSTALL JENKINS ******"
 
