@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Variables
-PROJECT_ID="keen-ally-438611-t7"
+# CURRENT GKE DETAILS
+PROJECT_ID="imposing-aspect-447113-h4"
 ZONE="europe-west1-b"
-CLUSTER_NAME="iels-gke-oct-jan"
-NODE_POOL_NAME="default-pool"
+CLUSTER_NAME="iels-kcl-jan-apr"
+NODE_POOL_NAME="iels-kcl-pool"
 NUM_NODES=0 # Number of nodes to scale down to
 
 # Authenticate with GCP
